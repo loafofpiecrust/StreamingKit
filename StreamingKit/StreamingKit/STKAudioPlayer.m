@@ -217,6 +217,8 @@ static AudioStreamBasicDescription recordAudioStreamBasicDescription;
 	Float32 volume;
 	Float32 peakPowerDb[2];
 	Float32 averagePowerDb[2];
+
+	Float32 pan;
 	
 	BOOL meteringEnabled;
     BOOL equalizerOn;
@@ -3458,6 +3460,24 @@ static OSStatus OutputRenderCallback(void* inRefCon, AudioUnitRenderActionFlags*
 {
 	return self->volume;
 }
+
+
+-(void) setPan:(Float32)value;
+{
+	self->pan = value;
+
+	if (self->mixerNode)
+	{
+		AudioUnitSetParameter(self->mixerUnit, kMultiChannelMixerParam_Pan, kAudioUnitScope_Output, 0, value, 0);
+	}
+}
+
+-(Float32) pan
+{
+	return self->pan;
+}
+
+
 
 -(BOOL) equalizerEnabled
 {
